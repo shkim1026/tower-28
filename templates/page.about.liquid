@@ -1,0 +1,14 @@
+{% section 'slideshow__about-template' %}
+{% section 'rich-text__about-template' %}
+
+{% if page.content != blank %}
+ <div class="container-wrap">
+    <div class="container content-about text-content row row-lg">
+      <p class="row row-sm rte">
+        {{ page.content }}
+      </p>
+    </div>
+  </div>
+{% endif %}
+
+{% section 'product-features__about-template' %}

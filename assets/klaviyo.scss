@@ -1,0 +1,16 @@
+/* -- code to use Scto Grotesk A Medium font-family in theme -- */
+ @font-face {   
+    font-family: 'Scto Grotesk A Medium';  
+          src: 	url('{{ "Scto_Grotesk_A_Medium.eot" | asset_url }}');   
+          src: 	url('{{ "Scto_Grotesk_A_Medium.eot" | asset_url }}#iefix') format("embedded-opentype"),
+        	url('{{ "Scto_Grotesk_A_Medium.woff" | asset_url }}') format("woff"),
+        	url('{{ "Scto_Grotesk_A_Medium.woff2" | asset_url }}') format("woff2"),
+         	url('{{ "Scto_Grotesk_A_Medium.svg" | asset_url }}#Scto_Grotesk_A_Medium') format("svg");
+         font-weight: medium;
+         font-style: normal;
+ } /* - end - */
+
+
+body ,h1, h2, h3,h4,p{
+font-family:"Scto Grotesk A",sans-serif !important;
+}

@@ -1,0 +1,34 @@
+.main-logo .logo {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.slide-content.slide-content--one-half {
+  max-width: 100%;
+  font-size: 16px;
+}
+
+.button.button--normal,
+button.button--normal {
+  padding: 20px 50px;
+  /*     width: 45%; */
+}
+
+.hero .slide-content {
+  padding: 30px 0;
+  position: absolute;
+  bottom: 85px;
+}
+
+.slide-url {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
+@media only screen and (max-width:1440px) {
+  .hero .slide-content {
+    bottom: 0;
+  }
+}

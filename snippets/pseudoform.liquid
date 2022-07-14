@@ -1,0 +1,51 @@
+<form class="productForm pseudoform" action="/cart/add" method="post">
+	<div class="productForm-block">
+		<select id="product-select--{{section.id}}" name="id">
+			{% for variant in currentProduct.variants %}
+				<option{% if variant == currentProduct.selected_or_first_available_variant %} selected{% endif %} value="{{ variant.id }}" data-sku="{{variant.sku}}">
+					{{ variant.title }} - {{ variant.price | money | strip_html }}
+				</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	{% if section.settings.show_quantity %}
+	<div class="productForm-block">
+		<div class="productForm-select">
+			<label for="quantity">{{ 'products.form.qty' | t }}</label>
+			<select name="quantity" id="quantity">
+			{% for i in (1..9) %}
+				<option value="{{ i }}">{{ i }}</option>
+			{% endfor %}
+			</select>
+			<span class="selectArrow"></span>
+		</div>
+	</div>
+	{% endif %}
+
+	<div class="productForm-block">
+		<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+			<meta itemprop="priceCurrency" content="{{ shop.currency }}">
+
+			<link itemprop="availability" href="http://schema.org/{% if currentProduct.available %}InStock{% else %}OutOfStock{% endif %}">
+
+			<div class="product-price" data-price="{{ product.price }}">
+				{% if on_sale == true %}
+					<h2 class="sale">
+						<strike class="product-compare-price">{{ currentProduct.compare_at_price | money }}</strike>&nbsp;
+
+						<span class="product-sale-price" itemprop="price">{{ currentProduct.price | money }}</span>
+					</h2>
+				{% else %}
+				{% unless onboarding_product == true %}
+					<h2 class="product-normal-price" itemprop="price">{{ currentProduct.price | money }}</h2>
+				{% else %}
+				  <h2 class="product-normal-price" itemprop="price">$99</h2>
+				{% endunless %}
+				{% endif %}
+			</div>
+
+			<button class="productForm-submit js-productForm-submit" type="submit" name="checkout" data-handle="{{product.handle}}" data-parent-id="{{section.id}}">{{ 'products.form.submit' | t }}</button>
+		</div>
+	</div>
+</form>

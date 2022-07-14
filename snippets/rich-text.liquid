@@ -1,0 +1,37 @@
+{% comment %} Settings {% endcomment %}
+{% assign layout = section.settings.layout %}
+{% assign title = section.settings.title %}
+{% assign content = section.settings.content %}
+{% assign cta = section.settings.cta %}
+{% assign link = section.settings.link %}
+
+{% comment %} Typography {% endcomment %}
+{% assign heading_size = section.settings.heading_size %}
+{% assign content_size = section.settings.content_size %}
+
+{% comment %} Section {% endcomment %}
+{% if title != blank or content != blank or cta != blank %}
+<section class="title-module hmsm container-wrap" id="text-module-{{ section.id }}" data-section-type="rich-text" style="background-color:{{ section.settings.background_color }};">
+	<div class="container pad-sm">
+		<div class="row {% if layout == 'split' %} row--split row-lg {% else %} row-md {% endif %}">
+
+			{% if title != blank %}
+				<h4 class="size--{{ heading_size }}">{{ title }}</h4>
+			{% endif %}
+
+			{% if content != blank %}
+				<div class="rich-content size--small" style="color:{{ section.settings.font_color }};text-transform:unset;">{{ content }}</div>
+			{% endif %}
+		</div>
+
+		{% if cta != blank %}
+			<div class="row row-lg">
+				<div class="button-wrap">
+					<a href="{{ link }}" class="button" title="{{ cta }}">{{ cta }}</a>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</section>
+{% endif %}
+

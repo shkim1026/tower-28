@@ -1,0 +1,483 @@
+{% comment %} Settings {% endcomment %}
+{% assign image_gallery = section.settings.image_gallery %}
+{% assign image_size = section.settings.image_size %}
+{% assign desc_position = section.settings.desc_position %}
+{% assign zoom = false %}
+{%- if image_gallery == 'zoom' -%}
+  {% assign zoom = true %}
+{%- endif -%}
+{% assign arrows = section.settings.product_slideshow_arrows %}
+{% assign dots = section.settings.product_slideshow_dots %}
+{% assign layout = 4 %}
+{% assign tab_1 = section.settings.page_tab_1 %}
+{% assign tab_2 = section.settings.page_tab_2 %}
+{% assign tab_3 = section.settings.page_tab_3 %}
+{% assign product_layout = section.settings.product_layout %}
+{% assign color_swatches = section.settings.color_swatches %}
+{% assign show_reviews = section.settings.show_reviews %}
+
+{% assign sold_out = true %}
+{% if product.available %}
+  {% assign sold_out = false %}
+{% endif %}
+
+<!-- Mustache Templates for rendering variant popover -->
+<div data-section-id="product-template" data-section-type="product-template">
+  <section class="product container-wrap js-product-template clearfix row row-lg js-product-template--product-template product-layout--{{ product_layout }}" data-show_reviews="{{ show_reviews }}">
+    <div class="container">
+      <div class="row">
+        <div class="breadcrumbs block">
+          {% if settings.show_breadcrumbs %}
+          {% include 'site-breadcrumbs' %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row row--{{ product_layout }} js-row--{{ product_layout }}">
+        <div class="product-layout-{{ layout }}--images product-layout-images product-layout-images--{{ image_size }} xxl_s12 xl_s12 lg_s12 s1">
+          {% comment %} Set the layout for the variant images {% endcomment %}
+          {% for image in product.images %}
+            {% if forloop.length <= 2 %}
+                {% assign thumbnail_width = 'product-image--100' %}
+            {% elsif forloop.length == 3 %}
+              {% assign thumbnail_width = 'product-image--50' %}
+            {% elsif forloop.length == 4 %}
+              {% assign thumbnail_width = 'product-image--33' %}
+            {% else %}
+              {% assign thumbnail_width = 'product-image--25' %}
+            {% endif %}
+            {% assign length = forloop.length %}
+          {% endfor %}
+
+          {% if product_layout == 'slideshow' %}
+            <div class="productImgSlider js-productImgSlider js-productImgContainer" data-gallery="{{ image_gallery }}" data-dots="{{ dots }}" data-arrows="{{ arrows }}" data-zoom="{{ zoom }}">
+                   {% for image in product.images %}
+                  {% if image.alt contains 'iframe' %}
+                   <div class="js-slide"> {{image.alt}}</div>
+                   {% else %} 
+                   <div class="js-slide {{ thumbnail_width }} product-image product-image--fit {% if forloop.length == 1 %}product-image--single{% endif %} lazyload fade-in" data-image="{{ image | product_img_url: 'master'}}" data-zoom-image="{{ image | product_img_url: 'master'}}"  data-id="{{ image.id }}" data-bgset="{% include 'bgset', image: image %}" data-sizes="auto" data-parent-fit="contain" data-aspect-ratio="{{ image.aspect_ratio }}">
+                      
+                    
+                    {%- if image_gallery == 'lightbox' -%}
+                      <a href="{{ image | product_img_url: 'master'}}" rel="lightbox" class="product-image-lightbox"></a>
+                      {%- endif -%}
+
+                      {%- if image_gallery == 'zoom' -%}
+                        <div class="zoom-container"></div>
+                      {%- endif -%}
+                    <noscript>
+                      <div class="product-image--no-js" style="background: url({{ image | img_url: '2048x' }}) no-repeat center center; background-size: contain;"></div>
+                    </noscript>
+                    <div class="js-MobileZoom mobile-zoom"><i class="icon-zoom"></i></div>
+                  </div>
+              
+                {%endif%}
+              {% endfor %}
+            </div>
+
+            {% if product.images.size > 1 %}
+            <div class="productImgSlider-nav js-productImgSlider-nav">
+              {% for image in product.images %}
+                {% assign image_widths = '295,394,590,700,800,1000,1200,1500,1800,2000,2400' %}
+                {% include 'theme-rias' %}
+                  <div class="js-slide {{ thumbnail_width }} product-image-thumb">
+                      <img 
+                         class="lazyload fade-in product-image-thumb-img"
+                         data-src="{{ image_url_pattern }}"
+                         data-widths= "[{{ image_widths }}]"
+                         data-aspectratio="{{image.aspect_ratio }}"
+                         data-sizes="auto"
+                         alt="{{ image.alt | escape }}"
+                         itemprop="image"
+                         >
+                       <noscript>
+                        <img src="{{ image | img_url: 'master' }}" alt="{{ image.alt | escape }}">
+                      </noscript>
+                  </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          {% else %} 
+            <div class="productImgScroller js-productImgScroller js-productImgContainer" data-gallery="{{ image_gallery }}" data-dots="{{ dots }}" data-arrows="{{ arrows }}" data-zoom="{{ zoom }}">
+              {% for image in product.images %}
+                  <div class="js-slide {{ thumbnail_width }} product-image product-image--fit {% if forloop.length == 1 %}product-image--single{% endif %} lazyload fade-in {% if forloop.index == 1 %} active{% endif %}" data-zoom-image="{{ image | product_img_url: 'master'}}" data-image="{{ image | product_img_url: 'master'}}" data-aspect-ratio="{{ image.aspect_ratio }}" data-id="{{ image.id }}" data-bgset="{% include 'bgset', image: image %}" data-sizes="auto" data-parent-fit="contain" data-index="{{ forloop.index }}">
+                      {%- if image_gallery == 'lightbox' -%}
+                      <a href="{{ image | product_img_url: 'master'}}" rel="lightbox" class="product-image-lightbox">
+                      {%- endif -%}                  
+                      {%- if image_gallery == 'lightbox' -%}
+                      </a>
+                      {%- endif -%}
+                    <noscript>
+                      <div class="product-image--no-js" style="background: url({{ image | img_url: '2048x' }}) no-repeat center center; background-size: contain;"></div>
+                    </noscript>
+                    <div class="js-MobileZoom mobile-zoom"><i class="icon-zoom"></i></div>
+                  </div>
+              {% endfor %}
+            </div>
+
+            {% if product.images.size > 1 %}
+            <div class="productImgScroller-nav js-productImgScroller-nav">
+              {% for image in product.images %}
+                {% assign image_widths = '295,394,590,700,800,1000,1200,1500,1800,2000,2400' %}
+                {% include 'theme-rias' %}
+                  <div class="js-slide {{ thumbnail_width }} product-image-thumb" data-index="{{ forloop.index }}" data-image="{{ image | product_img_url: 'master'}}" >
+                      <img 
+                         class="lazyload fade-in product-image-thumb-img"
+                         data-src="{{ image_url_pattern }}"
+                         data-widths= "[{{ image_widths }}]"
+                         data-aspectratio="{{image.aspect_ratio }}"
+                         data-sizes="auto"
+                         alt="{{ image.alt | escape }}"
+                         itemprop="image"
+                         >
+                       <noscript>
+                        <img src="{{ image | img_url: 'master' }}" alt="{{ image.alt | escape }}">
+                      </noscript>
+                  </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          {% endif %} 
+        </div>
+        <!-- end product-images -->
+
+        <div class="product-info js-product-info product-layout-{{ layout }}--info xxl_s12 xl_s12 lg_s12 s1">
+          <div class="product-info--wrapper js-product-info--wrapper">
+            <div class="block s1 product-title--wrapper">
+              {%- if section.settings.show_vendor -%}
+                <p class="product-vendor">{{ product.vendor }}</p>
+              {%- endif -%}
+              
+              <h1 itemprop="name" class="product-title">{{ product.title }}</h1>
+
+<span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{ product.id }}" data-product-title="{{ product.title | escape }}" data-product-type="{{ product.type }}" style="display: block;margin:10px 0;">{{ product.metafields.stamped.badge }}</span>
+
+              <div class="product-price" data-price="{{ product.price }}">
+
+                {% if on_sale == true %}
+                  <h2 class="sale">
+                    <strike class="product-compare-price">{{ product.compare_at_price | money }}</strike>&nbsp;
+                    <span class="product-sale-price" itemprop="price">{{ product.price | money }}</span>
+                  </h2>
+                {% else %}
+                  <h2 class="product-normal-price" itemprop="price">{{ product.price | money }}</h2>
+                {% endif %}
+                
+                {% comment %}{% if show_reviews %}
+                  <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                {% endif %}{% endcomment %}
+
+              </div>
+              
+              {% if desc_position == 'top' %}
+              <div class="product-container">
+                <div class="product-description">
+                  {{ product.description }}
+                </div>
+              </div>
+              {% endif %}
+
+            </div>
+            <div class="product-form block s1">
+              {% form 'product', product, data-productid: product.id, class:'productForm', data-color_swatches: color_swatches %}
+<!-- Begin ReCharge code -->
+{% if product.available %}{% render 'subscription-product' with product as product %}{% endif %}
+<!-- End ReCharge code -->
+
+<!-- Begin ReCharge code -->
+{% if product.available %}{% endif %}
+<!-- End ReCharge code -->
+
+                <div class="productForm-block productForm-block--options-inline {% if color_swatches == true %}productForm-block--swatches is-loading{% endif %}">
+
+                  <select id="product-select" name="id" data-productid="{{ product.id }}">
+                  {% for variant in product.variants %}
+                    <option{% if variant == product.selected_or_first_available_variant %} selected{% endif %} value="{{ variant.id }}" data-sku="{{variant.sku}}">
+                    {{ variant.title }} - {{ variant.price | money | strip_html }}
+                  </option>
+                  {% endfor %}
+                  </select>
+                  
+                  {% if product.variants.size > 1 and color_swatches == true %}
+                   {% include 'swatch' with 'Shade' %}
+                  {% endif %}
+
+                </div>
+
+                <div class="productForm-block">
+                  <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                    <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+                    <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+
+                    {% if section.settings.show_quantity %}
+                    <div class="productForm-select">
+                      <label for="quantity">{{ 'products.form.qty' | t }}</label>
+                      <select name="quantity" id="quantity">
+                        {% for i in (1..9) %}
+                          <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                      </select>
+                      <span class="selectArrow"></span>
+                    </div>
+                    {% endif %}
+                    
+                    <button class="productForm-submit js-productForm-submit {% if section.settings.enable_payment_button %}button--primary{% endif %}" type="submit"  data-handle="{{product.handle}}">{{ 'products.form.submit' | t }}</button>
+                                        
+                        {% if template contains 'product' %}
+                            {% if section.settings.enable_payment_button %}
+                                {{ form | payment_button }}
+                            {% endif %}
+                        {% endif %}
+                  
+                  </div>
+                </div>
+              {% endform %}
+              
+              {% if section.settings.show_newsletter %}
+              	<div class="notification-form {% unless sold_out %}visually-hidden{% endunless %}">
+              
+                
+	            </div>
+              {% endif %}
+
+              {% if settings.share_on_facebook or settings.share_on_twitter or settings.share_on_googleplus or settings.share_on_pinterest %}
+              <div class="product-share">
+                <span class="socialBar p">{% include 'site-shareLinks' %}</span>
+              </div>
+              {% endif %}
+
+              {% if desc_position == 'bottom' %}
+               <span class="nf"></span>
+              <div class="product-container">
+                <div class="product-description">
+                  {{ product.description }}
+                </div>
+              </div>
+              {% endif %}
+
+              {% if tab_1 != blank or tab_2 != blank or tab_3 != blank or show_reviews %}
+                <div class="product-tabs js-product-tabs">
+                  {% if show_reviews %}
+                    {% comment %}<div class="product-tab product-tab--reviews">{% endcomment %}
+                      {% comment %}<div class="product-tab-title" itemprop="title">{{ section.settings.reviews_title }} <span class="icon-toggle"></span></div>{% endcomment %}
+                      {% comment %}<div class="product-tab-content" itemprop="content">{% endcomment %}
+                        {% comment %}<div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div> {% endcomment %}
+                     {% comment %} </div>{% endcomment %}
+                    </div>
+                  {% endif %}
+                  {% if tab_1 != blank %}
+                    <div class="product-tab">
+                      <div class="product-tab-title" itemprop="title">{{ pages[tab_1].title }} <span class="icon-toggle"></span></div>
+                      <div class="product-tab-content" itemprop="content">{{pages[tab_1].content}}</div>
+                    </div>
+                  {% endif %}
+                  {% if tab_2 != blank %}
+                    <div class="product-tab">
+                      <div class="product-tab-title" itemprop="title">{{ pages[tab_2].title }} <span class="icon-toggle"></span></div>
+                      <div class="product-tab-content" itemprop="content">{{pages[tab_2].content}}</div>
+                    </div>
+                  {% endif %}
+                  {% if tab_3 != blank %}
+                    <div class="product-tab">
+                      <div class="product-tab-title" itemprop="title">{{ pages[tab_3].title }} <span class="icon-toggle"></span></div>
+                      <div class="product-tab-content" itemprop="content">{{pages[tab_3].content}}</div>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+  {%- if section.settings.show_cart_bar -%}
+    {% include 'add-to-cart-bar' %}
+  {%- endif -%}
+</div> <!-- end itemscope -->
+
+{% schema %}
+  {
+    "name": "Product page",
+    "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "product_layout",
+      "label": "Image layout",
+      "options": [
+        {
+          "value": "slideshow",
+          "label": "Slideshow"
+        },
+        {
+          "value": "scrollable",
+          "label": "Scrollable"
+        }
+      ],
+      "default": "slideshow"
+    },
+    {
+      "type": "select",
+      "id": "image_gallery",
+      "label": "Image gallery",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "zoom",
+          "label": "Hover to zoom"
+        },
+        {
+          "value": "lightbox",
+          "label": "Lightbox"
+        }
+      ],
+      "default": "zoom"
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Image size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "desc_position",
+      "label": "Description position",
+      "default": "top",
+      "options": [
+        { "label": "Top", "value": "top" },
+        { "label": "Bottom", "value": "bottom" }
+      ]
+    },
+    { 
+      "type": "checkbox",
+      "id": "color_swatches",
+      "label": "Enable color swatches",
+      "default": true
+    },
+    { 
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    },
+    { 
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show quantity ticker",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_bar",
+      "label": "Show Add to cart bar",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter if out of stock",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "text_newsletter",
+      "label": "Text",
+      "default": "<p>Notify me when this product is available:</p>"
+    },
+    {
+      "type": "header",
+      "content": "Dynamic checkout buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_payment_button",
+      "label": "Show dynamic checkout button",
+      "info": "Lets customers check out directly using a familiar payment method. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Reviews",
+      "info": "Install Shopify's free [Product Reviews app](https://apps.shopify.com/product-reviews) before enabling this option."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Enable",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "reviews_title",
+      "label": "Title",
+      "default": "Reviews"
+    },
+    {
+      "type": "header",
+      "content": "Tabs",
+      "info": "You have the option to enable three extra tabs for more information on your product."
+    },
+    {
+      "type": "page",
+      "id": "page_tab_1",
+      "label": "Tab one"
+    },
+    {
+      "type": "page",
+      "id": "page_tab_2",
+      "label": "Tab two"
+    },
+    {
+      "type": "page",
+      "id": "page_tab_3",
+      "label": "Tab three"
+    },
+    {
+      "type": "header",
+      "content": "Slideshow options",
+      "info": "On mobile, if there is more than one product image, the image grid will become a slideshow"
+    }, 
+    {
+      "type": "checkbox",
+      "id": "product_slideshow_dots",
+      "label": "Show slide navigation dots",
+      "default": false
+    }, 
+    {
+      "type": "checkbox",
+      "id": "product_slideshow_arrows",
+      "label": "Show slide navigation arrows",
+      "default": false
+    }
+    ]
+  }
+{% endschema %}

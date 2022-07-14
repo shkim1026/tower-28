@@ -1,0 +1,200 @@
+<div class="marquee"  data-aos="fade-up">
+  <div class="marquee_slider">
+
+    {% for block in section.blocks %}
+    {% if block.settings.mp4-video != blank %}
+    <div class="item mp4">
+      <video loop="" muted="" autoplay="autoplay" preload="" id="vid">
+        <source src="{{ block.settings.mp4-video }}" type="video/mp4">
+      </video>
+      <div class="overlay">
+        <div class="overlay_text">
+          {% if block.settings.heading-mp4 %}
+          <h1 class="heading">{{ block.settings.heading-mp4 }}</h1>
+          {% endif %}
+          {% if block.settings.content-mp4 %}
+          <h4 class="sub-heading">{{ block.settings.content-mp4 }}</h4>
+          {% endif %}
+          {% if block.settings.button-url-mp4 %}
+          <a tabindex="0" href="{{ block.settings.button-url-mp4 }}" class="button button--normal button--primary tower-button navigable cta-button" aria-label="{{ block.settings.button-content-mp4 }}" title="{{ block.settings.button-content-mp4 }}" data-open-accessibility-text-original="14px">{{ block.settings.button-content-mp4 }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if block.settings.video_url != blank %}
+    <div class="item youtube">
+      <lite-youtube youutbe-video-id="{{ block.settings.video_url.id }}">
+        <iframe src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}?controls=0&modestbranding=1&loop=0&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </lite-youtube>
+      <div class="overlay">
+        <div class="overlay_text">
+          {% if block.settings.heading-yt %}
+          <h1 class="heading">{{ block.settings.heading-yt }}</h1>
+          {% endif %}
+          {% if block.settings.content-yt %}
+          <h4 class="sub-heading">{{ block.settings.content-yt }}</h4>
+          {% endif %}
+          {% if block.settings.button-url-yt %}
+          <a tabindex="0" href="{{ block.settings.button-url-yt }}" class="button button--normal button--primary tower-button navigable cta-button" aria-label="{{ block.settings.button-content-yt }}" title="{{ block.settings.button-content-yt }}" data-open-accessibility-text-original="14px">{{ block.settings.button-content-yt }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if block.settings.vimeo_video_id != blank %}
+    <div class="item vimeo">
+      <iframe src="https://player.vimeo.com/video/{{ block.settings.vimeo_video_id }}" width="640" height="512" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="overlay">
+        <div class="overlay_text">
+          {% if block.settings.heading-vim %}
+          <h1 class="heading">{{ block.settings.heading-vim }}</h1>
+          {% endif %}
+          {% if block.settings.content-vim %}
+          <h4 class="sub-heading">{{ block.settings.content-vim }}</h4>
+          {% endif %}
+          {% if block.settings.button-url-vim %}
+          <a tabindex="0" href="{{ block.settings.button-url-vim }}" class="button button--normal button--primary tower-button navigable cta-button" aria-label="{{ block.settings.button-content-vim }}" title="{{ block.settings.button-content-vim }}" data-open-accessibility-text-original="14px">{{ block.settings.button-content-vim }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+  </div>
+</div>
+<style>
+
+/**Css By S*****/
+
+.marquee_slider .item{position:relative; height:600px;}
+.marquee_slider .item video {width: 100%; height:600px; object-fit: cover;}
+
+.marquee_slider .item .overlay {position: absolute;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,.2);z-index: 0; display:flex; align-items:center; justify-content:center;}
+.marquee_slider .item .overlay .overlay_text{text-align: center; color: white;}
+.marquee_slider .item .overlay .overlay_text .heading{color: rgb(255, 242, 232) !important; font-size: 52px;font-family: "Cooper BT",serif;}
+.marquee_slider .item .overlay .overlay_text .sub-heading{color: rgb(255, 242, 232) !important; font-size: 18px;    font-family: "Scto Grotesk A Medium",sans-serif;}
+.marquee_slider .item .overlay .overlay_text .cta-button{font-size:14px;padding: 10px 113px!important;margin-top: 25px;}
+  
+  
+</style>
+
+{% schema %}
+  {
+    "name": "Video Carousel",
+	"class": "header--full",
+    "settings": [
+      
+],
+"blocks": [
+	{
+	  "type": "Mp4_video",
+	  "name": "MP4 Video",
+	  "settings":[
+	    {
+          "type": "text",
+          "id": "mp4-video",
+          "label": "MP4 Video URL"
+        },
+		{
+          "type": "text",
+          "id": "heading-mp4",
+          "label": "Heading"
+        },
+		{
+          "type": "textarea",
+          "id": "content-mp4",
+          "label": "Content"
+        },
+		{
+          "type": "url",
+          "id": "button-url-mp4",
+          "label": "Button URL"
+        },
+		{
+          "type": "text",
+          "id": "button-content-mp4",
+          "label": "Button CTA"
+        }
+
+	]
+	},
+	{
+	  "type": "youtube_video",
+	  "name": "YouTube Video",
+	  "settings":[
+	    {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "YouTube Video URL",
+          "accept": ["youtube"]
+        },
+		{
+          "type": "text",
+          "id": "heading-yt",
+          "label": "Heading"
+        },
+		{
+          "type": "textarea",
+          "id": "content-yt",
+          "label": "Content"
+        },
+		{
+          "type": "url",
+          "id": "button-url-yt",
+          "label": "Button URL"
+        },
+		{
+          "type": "text",
+          "id": "button-content-yt",
+          "label": "Button CTA"
+        }
+	]
+	},
+	{
+	  "type": "vimeo_video",
+	  "name": "Vimeo Video",
+	  "settings":[
+	    {
+          "type": "text",
+          "id": "vimeo_video_id",
+          "label": "Vimeo Video Id"
+        },
+		{
+          "type": "text",
+          "id": "heading-vim",
+          "label": "Heading"
+        },
+		{
+          "type": "textarea",
+          "id": "content-vim",
+          "label": "Content"
+        },
+		{
+          "type": "url",
+          "id": "button-url-vim",
+          "label": "Button URL"
+        },
+		{
+          "type": "text",
+          "id": "button-content-vim",
+          "label": "Button CTA"
+        }
+	]
+	}
+],
+"presets": [
+	{
+		"name": "Video Carousel",
+		"category": "Homepage"
+	}
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

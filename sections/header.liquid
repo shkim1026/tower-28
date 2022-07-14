@@ -1,0 +1,490 @@
+{% comment %} Settings Slide Out Navigation {% endcomment %}
+{% assign menuPrimary = section.settings.menu_1_list %}
+{% assign menuSecondary = section.settings.menu_2_list %}
+
+{% if section.settings.show_announcement %}
+{% include 'announcement-bar' %}
+{% endif %}
+
+{% assign position = 'is-hamburger' %}
+{% if section.settings.nav_layout == 'standard' %}
+{% assign position = 'is-standard' %}
+{% endif %}
+
+{% assign logo_position = section.settings.logo_position %}
+{% assign links_position = section.settings.links_position %}
+
+<style>
+.main-logo .logo { max-width: {{ section.settings.logo_max_width | append: 'px' }}; }
+</style>
+
+<header class="site-header header--no-bg {{ position }} header--{{ logo_position }}_{{ links_position }} header--{{ section.settings.nav_layout }} {% if section.settings.show_announcement %}has-announcement-bar{% endif %} {% if section.settings.show_announcement_on_mobile %}has-announcement-bar--mobile{% endif %} template-{{ template }}" data-section-type="header" data-layout="{{ section.settings.nav_layout }}" id="header">
+    <div class="container">
+        <div class="row row-lg">
+            <div class="header-fix-cont">
+                <div class="header-fix-cont-inner">
+                  
+                  
+                  
+    <nav class="menux nav-standard  {% if has_meganav %}menu--has-meganav{% endif %}">
+      {% comment %}
+        Loop through the first link list.
+      {% endcomment %}
+      {% if menuPrimary != blank %}
+        {% for link in linklists["main-menu-left"].links %}
+          {% assign has_sub_menu = false %}
+
+          {% for sublink in link.links %}
+              {% if link.levels > 0 %}
+                {% assign has_sub_menu = true %}
+              {% endif %}
+          {% endfor %}
+
+          {% assign is_meganav = false %}
+          {% if link.levels == 2 and is_hamburger_nav == false %}
+            {% assign is_meganav = true %}
+          {% endif %}
+          
+          <li class="menu-item{% if has_sub_menu == true %} has-submenu{% endif %} {% if is_meganav %}menu-item--meganav{% endif %}">
+            <!-- LINKS -->
+            <a {% if has_sub_menu %}aria-haspopup="true"{% endif %} {% if forloop.first and section.settings.show_search == false %}id="firstFocus"{% endif %} class = "visible-nav-link" tabindex= "{{ index }}" href="{{ link.url }}" aria-expanded="false">{{ link.title | escape }}</a>
+
+            {% if link.levels > 0 %}
+              {% if is_meganav %}
+                <div class="megamenu-wrapper">
+                  <div class="row">
+                    <div class="megamenu-inner">
+              {% endif %}
+              
+              {%- capture submenuClass -%}
+                {%- if is_meganav -%}
+                  submenu--items-{{ link.links.size }}
+                {%- endif -%}
+              {%- endcapture -%}
+
+              <!-- MEGANAV IMAGE AND TEXT -->
+              {%- if is_meganav -%}
+                {%- if image != blank or image_heading != blank -%}
+                  <div class="megamenu__image">
+                    {%- if image -%}
+                      {%- capture meganav_image -%}
+                        {%- assign image_widths = '295,394,590,700,800,1000,1200,1500,1800,2000,2400' -%}
+                        {%- include 'theme-rias' -%}
+                        <img class="lazyload fade-in"
+                          src="{{ image | img_url: '64x' }}"
+                          data-src="{{ image_url_pattern }}"
+                          data-widths="[{{ image_widths }}]"
+                          data-aspectratio="{{ image.aspect_ratio }}"
+                          data-sizes="auto"
+                          alt="{{ image.alt }}">
+                        <noscript>
+                          <img src="{{ image.alt | img_url: '1024x' }}" alt="{{ image.alt }}">
+                        </noscript>
+                      {%- endcapture -%}
+
+                      {%- unless image_link == blank -%}
+                        <a href="{{ image_link }}" tabindex="{{ index | plus: 1 }}">{{ meganav_image }}</a>
+                      {%- else -%}
+                        {{ meganav_image }}
+                      {%- endunless -%}
+                    {%- endif -%}
+
+                    {%- unless image_heading == blank -%}
+                      <h4><span>{{ image_heading }}</span></h4>
+                    {%- endunless -%}
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+              <!-- END MEGANAV IMAGE AND TEXT -->
+
+              <ul class="submenu {{ submenuClass }}">
+                {% if is_hamburger_nav %}
+                <!-- BACK LINK -->
+                <li class="submenu-back">
+                  <a class="submenu-back--link first-back--link" data-sub-links="{{ link.levels }}" tabindex= "{{ index | plus: 1 }}" href="#0">{{ link.title | escape }}</a>
+                </li>
+                {% endif %}
+
+                <!-- SUBMENU LINKS -->
+                {% for sublink in link.links %}
+                  <li data-levels = "{{ sublink.levels }}" class="submenu-item {% if sublink.levels > 0 %}has-submenu{% endif %}">
+                    <!-- SUBLINK TITLE -->
+                    <a {% if has_sub_menu %}aria-haspopup="true"{% endif %} {% if forloop.last == true  %} data-last="true" {% endif %} class = "submenu-item--link {% if is_meganav %}submenu-item__title{% endif %}" tabindex= "{{ index | plus: 1 }}" href="{{ sublink.url }}" aria-expanded="false">{{ sublink.title }}</a>
+
+                    {% if sublink.levels > 0 %}
+                    <!-- BEGIN SUB SUB LINK -->
+                    <ul class="submenu">
+                      {% if is_hamburger_nav %}
+                      <!-- BACK LINK -->
+                      <li class="submenu-back">
+                        <a class="submenu-back--link" data-sub-links="{{ link.levels }}" tabindex= "{{ index | plus: 1 }}" href="#0">{{ sublink.title | escape }}</a>
+                      </li>
+                      {% endif %}
+                      <!-- SUBMENU LINKS -->
+                      {% for subsublink in sublink.links %}
+                        <li class="submenu-item">
+                          <a {% if forloop.last == true  %} data-last="true" {% endif %} class = "submenu-item--link" tabindex= "{{ index | plus: 1 }}" href="{{ subsublink.url }}">{{ subsublink.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                   </li>
+                  <!-- END SUBSUBLINK -->
+                {% endfor %}
+
+              </ul>
+
+              {% if is_meganav %}
+                    </div>
+                  </div>
+                </div>
+                <!-- END MEGAMENU WRAPPER -->
+              {% endif %}
+           {% endif %}
+
+          </li>
+        {% endfor %}
+      {% endif %}
+
+      {% comment %}
+        Loop through the second link list.
+      {% endcomment %}
+      {% if menuSecondary != blank %}
+        <span class="menu-divider menu-item"></span>
+
+        {% for link in linklists[menuSecondary].links %}
+          {% assign has_sub_menu = false %}
+
+          {% for sublink in link.links %}
+            {% if forloop.first %}
+              {% if sublink.levels > 0 %}
+                {% assign has_sub_menu = true %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          <li class="menu-item{% if has_sub_menu == true %} has-submenu{% endif %}">
+            <!-- LINKS -->
+            <a {% if has_sub_menu %}aria-haspopup="true"{% endif %} {% if forloop.first and section.settings.show_search == false %}id="firstFocus"{% endif %} class = "visible-nav-link" tabindex= "{{ index }}" href="{{ link.url }}">{{ link.title | escape }}</a>
+
+            {% if link.levels %}
+              <ul class="submenu">
+                <!-- BACK LINK -->
+                <li class="submenu-back">
+                  <a class="submenu-back--link first-back--link" data-sub-links="{{ link.levels }}" tabindex= "{{ index }}" href="#0">{{ link.title | escape }}</a>
+                </li>
+                <!-- SUBMENU LINKS -->
+                {% for sublink in link.links %}
+                  <li data-levels = "{{ sublink.levels }}" class="submenu-item {% if sublink.levels > 0 %}has-submenu{% endif %}">
+                    <!-- SUBLINK TITLE -->
+                    <a {% if has_sub_menu %}aria-haspopup="true"{% endif %} {% if forloop.last == true  %} data-last="true" {% endif %} class = "submenu-item--link" tabindex= "{{ index }}" href="{{ sublink.url }}">{{ sublink.title }}</a>
+                  <!-- BEGIN SUB SUB LINK -->
+                  <ul class="submenu">
+                    <!-- BACK LINK -->
+                    <li class="submenu-back">
+                      <a class="submenu-back--link" data-sub-links="{{ link.levels }}" tabindex= "{{ index }}" href="#0">{{ sublink.title | escape }}</a>
+                    </li>
+                    <!-- SUBMENU LINKS -->
+                    {% for subsublink in sublink.links %}
+                      <li class="submenu-item">
+                        <a {% if forloop.last == true  %} data-last="true" {% endif %} class = "submenu-item--link" tabindex= "{{ index }}" href="{{ subsublink.url }}">{{ subsublink.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                   </li>
+                  <!-- END SUBSUBLINK -->
+                {% endfor %}
+
+              </ul>
+           {% endif %}
+
+          </li>          
+        {% endfor %}
+      {% endif %}
+    </nav>
+                  
+                  
+                  
+                  
+                  <div class="nav-mid">
+                    
+                     {%if template == 'index' %}
+              {% if section.settings.logo %}
+                  <a tabindex= "1" href="/" class="visible-nav-link nav-item main-logo">
+                      {% assign image = section.settings.logo %}
+                      <img src="{{ image | img_url: '500x' }}" class="logo logo-home" alt="{{ image.alt | escape }}">
+                      
+                      {% if section.settings.logo_other %}
+                        {% assign image = section.settings.logo_other %}
+                        <img src="{{ image | img_url: '500x' }}" class="logo logo-other" alt="{{ image.alt | escape }}">
+                      {% endif %}
+                  </a>
+              {% else %}
+                {% if section.settings.show_site_name %}
+                  <h1 class="nav-item main-logo main-logo__text {% if section.settings.logo_other == blank %}main-logo--text-only{% endif %}" itemscope itemtype="http://schema.org/Organization">
+                      <a id="shopName" href="/" itemprop="url">{{ shop.name | escape }}</a>
+                  </h1>
+                {% endif %}
+                
+                {% if section.settings.logo_other %}
+                  <a tabindex= "1" href="/" class="visible-nav-link nav-item main-logo">
+                      {% assign image = section.settings.logo_other %}
+                      <img src="{{ image | img_url: '500x' }}" class="logo logo-other" alt="{{ image.alt | escape }}">
+                  </a>
+                {% endif %}
+              {% endif %}
+            {% else %}
+              {% if section.settings.logo_other != blank %}
+                <a tabindex= "1" href="/" class="visible-nav-link nav-item main-logo">
+                    {% assign image = section.settings.logo_other %}
+                    <img src="{{ image | img_url: '500x' }}" class="logo" alt="{{ image.alt | escape }}">
+                </a>
+              {% else %}
+                {% if section.settings.logo %}
+                <a tabindex= "1" href="/" class="visible-nav-link nav-item main-logo">
+                    {% assign image = section.settings.logo %}
+                    <img src="{{ image | img_url: '500x' }}" class="logo" alt="{{ image.alt | escape }}">
+                </a>
+                {% else %}
+                  {% if section.settings.show_site_name %}
+                  <h1 class="nav-item main-logo main-logo__text {% if section.settings.logo == blank %}main-logo--text-only{% endif %}" itemscope itemtype="http://schema.org/Organization">
+                      <a id="shopName" href="/" itemprop="url">{{ shop.name | escape }}</a>
+                  </h1>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+                  </div>
+                    <a href="#menu" class="js-menuToggle menuToggle nav-item-fixed nav-item" data-target="nav" aria-expanded="false">
+                        <div id="hamburger-menu" class="icon-menu">
+                            <img alt="icon-menu-open" src='{{"icon_fallback_menu.png" | asset_url }}' class="ie8-hidden icon-menu-open">
+                            <img alt="icon-menu-close" src='{{"icon_fallback_close.png" | asset_url }}' class="ie8-hidden icon-menu-close">
+                            <div class="diamond-bar"></div>
+                            <div id="hamburger-bar" class="icon-bar"></div>
+                        </div>
+                    </a>
+                  
+                  
+                  <div class="right-nav">
+ {% if section.settings.nav_layout == 'standard' %}
+                      <nav role="navigation" class="nav-standard nav-main">
+                        {% assign is_hamburger_nav = false %}
+                        {% include 'navigation' %}
+                      </nav>
+                    {% endif %}
+                    <a id="cartTotal" href="/cart" aria-label="{{ 'cart.labels.items_added' | t }}" class="js-cartToggle cartToggle nav-item-fixed nav-item diamond-outline" tabindex="2" aria-expanded="false">
+                      {% include 'icon-cart' %}
+                      <div id="CartToggleItemCount" class="cartToggle-items">{{cart.item_count}}</div>
+                    </a>
+
+                    {% if shop.customer_accounts_enabled and section.settings.show_account_icon %}
+                      <a href="/account" class="nav-item nav-item-fixed nav-account-link {% unless section.settings.show_search %}nav-account-link--no-search{% endunless %}" tabindex="2">{% include 'icon-user' %}</a>
+                    {% endif %}
+
+                   
+                  </div>
+                  
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</header>
+
+{% comment %} Site Navigation {% endcomment %}
+<nav role="navigation" class="nav-container nav-main style-default">
+  <div class="nav-inner">
+    <div class="nav-mobile-close js-menuToggle" aria-expanded="false">
+      <i class="icon-close"></i>
+    </div>
+    {% assign is_hamburger_nav = true %}
+    {% include 'navigation' %}
+  </div>
+</nav>
+
+{% unless template == 'cart' %}
+  <div class="cartContainer">
+    {% include 'site-cart' %}
+  </div>
+{% endunless %}
+
+{% comment %} Adds room to the top of the page under the fixed header. {% endcomment %}
+      <div class="bodyWrap-spacer"></div>
+
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Custom logo (Home page)",
+      "info": "440px width recommended"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_other",
+      "label": "Custom logo (All other pages)",
+      "info": "440px width recommended"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "Custom logo width (in pixels)",
+      "min": 50,
+      "max": 500,
+      "default": 100,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_site_name",
+      "label": "Show site name",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account_icon",
+      "label": "Show account icon",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "menu_searches_list",
+      "label": "Search menu",
+      "info": "This menu won't show dropdown items"
+    },
+    {
+      "type": "header",
+      "content": "Menus"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1_list",
+      "label": "Primary menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2_list",
+      "label": "Secondary menu",
+      "info": "For Hamburger layout only"
+    },
+    {
+      "type":"header",
+      "content":"Navigation settings"
+    },
+    {
+      "type": "select",
+      "id": "nav_layout",
+      "label": "Navigation layout",
+      "default": "standard",
+      "options": [
+        {
+          "value": "hamburger",
+          "label": "Hamburger"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        }
+      ]
+    },
+    {
+      "type":"header",
+      "content":"Standard navigation",
+      "info":"These options are only applicable if you have enabled Standard navigation above"
+    },
+    {
+      "type": "select",
+      "id": "logo_position",
+      "label": "Logo position",
+      "default": "logo_left",
+      "options": [
+        {
+          "value": "logo_left",
+          "label": "Left"
+        },
+        {
+          "value": "logo_center",
+          "label": "Center"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "links_position",
+      "label": "Links position",
+      "default": "links_right",
+      "options": [
+        {
+          "value": "links_right",
+          "label": "Right"
+        },
+        {
+          "value": "links_center",
+          "label": "Center"
+        }
+      ]
+    },
+    {
+      "type":"header",
+      "content":"Mega menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "meganav_image",
+      "label": "Image",
+      "info": "Recommended size: 500 x 800 px"
+    },
+    {
+      "type": "text",
+      "id": "meganav_image_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "url",
+      "id": "meganav_image_link",
+      "label": "Link"
+    },
+    {
+      "type":"header",
+      "content":"Announcement bar"
+    },
+    {
+      "type":"checkbox",
+      "id":"show_announcement",
+      "label":"Show announcement",
+      "default": true
+    },
+    {
+      "type":"checkbox",
+      "id":"show_announcement_on_mobile",
+      "label":"Show on mobile",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default":"<p>Broadcast sales, promos, or other offerings here</p>"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ]
+}
+{% endschema %}

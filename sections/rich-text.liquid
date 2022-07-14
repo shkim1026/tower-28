@@ -1,0 +1,79 @@
+{% include 'rich-text' %}
+
+{% comment %} Schema {% endcomment %}
+{% schema %}
+	{
+		"name": "Rich text",
+		"settings": [
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "select",
+			"id": "layout",
+			"label": "Text position",
+			"default": "default",
+			"options": [
+				{ "label": "Stacked", "value": "default" },
+				{ "label": "Split", "value": "split" }
+			]
+		},
+		{
+			"type": "header",
+			"content": "Typography"
+		},
+		{
+			"type": "select",
+			"id": "heading_size",
+			"label": "Heading size",
+			"default": "small",
+			"options": [
+				{ "label": "Small", "value": "small" },
+				{ "label": "Normal", "value": "normal" },
+				{ "label": "Large", "value": "large" },
+				{ "label": "Extra large", "value": "xlarge" }
+			]
+		},
+		{
+			"type": "header",
+			"content": "Content"
+		},
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Heading",
+			"default":"Describe your products or brand in detail here"
+		}, {
+			"type": "richtext",
+			"id": "content",
+			"label": "Text",
+			"default":"<p>Modular is a powerful Shopify theme that will set you apart from the rest. It features ample space to showcase your imagery with Mosaic, Gallery, and Slideshow sections.</p>"
+		}, 
+    {
+      "type": "color",
+      "id": "font_color",
+      "label": "Font color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#fafafa"
+    },
+{
+			"type": "text",
+			"id": "cta",
+			"label": "Button label"
+		}, {
+			"type": "url",
+			"id": "link",
+			"label": "Button link"
+		} ],
+		"presets": [ {
+			"category": "Text",
+			"name": "Rich text"
+		} ]
+	}
+{% endschema %}

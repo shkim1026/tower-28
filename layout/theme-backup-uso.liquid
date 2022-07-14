@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie9 no-js"><![endif]-->
+<!--[if IE 8 ]><html class="ie8 no-js"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+<!--[if IE]><!--><html class="ie"><!--<![endif]-->
+
+<head>
+<script>
+/* >> TriplePixel :: start*/
+~function(W,H,A,L,E){try{A.setItem(H,1+(0|A.getItem(H)||0)),W.includes("⇈")&&A.setItem(H+"Stg",1+(0|A.getItem(H+"Stg")||0))}catch(e){}function O(T,R){void 0===R&&(R=!1),H=new XMLHttpRequest,H.open("GET","//triplewhale-pixel.web.app/triplepx.txt?"+~(Date.now()/9e7),!0),H.send(null),H.onreadystatechange=function(){4===H.readyState&&200===H.status?setTimeout(function(){return eval(H.responseText)},50):(299<H.status||H.status<200)&&T&&!R&&(R=!0,O(T-1))}}A=window,A[H]||(L=function(){return"tp.."+Date.now().toString(36)+Math.random().toString(36)},E=A[H]=function(t,e,n){return W=L(),(E._q=E._q||[]).push([W,e,n]),W},E.ch=W,O(5))}("","TriplePixel",localStorage);
+/* << TriplePixel :: end*/
+</script>
+
+    <script>
+  dataLayer = [];
+  </script>
+  <!-- Anti-flicker snippet (recommended) -->
+  <style>.async-hide { opacity: 0 !important} </style>
+  <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+  h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+  (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+  })(window,document.documentElement,'async-hide','dataLayer',4000,
+  {'GTM-PR5JL32':true});</script> 
+  <script async src="https://www.googleoptimize.com/optimize.js?id=GTM-PJD7GKZ"></script>
+  
+  {% include 'gtm-container' %}
+  
+  <meta charset="utf-8" />
+
+  {% if settings.favicon != blank %}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {% endif %}
+  
+  <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' /><![endif]-->
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  {% include 'site-social-meta' %}
+
+  {{ 'style.scss.css' | asset_url | stylesheet_tag }}
+   {{ 'custom.css' | asset_url | stylesheet_tag }}
+<!--    {{ 'klaviyo.scss' | asset_url | stylesheet_tag }} -->
+   {{ 'phillip-edits.scss.css' | asset_url | stylesheet_tag }}
+
+  <!-- SCRIPTS -->
+  <!--[if lt IE 9]>{{ '//html5shiv.googlecode.com/svn/trunk/html5.js' | script_tag }}<![endif]-->
+  {{ 'modernizr.min.js'  | asset_url | script_tag }}
+  {{ 'respond.min.js'  | asset_url | script_tag }}
+  {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% if template contains 'customers' %}
+    {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+  {% endif %}
+  <!-- JQUERY -->
+  {{ 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js' | script_tag }}
+  <!-- jQuery Dependent -->
+  {{ 'api.jquery.js' | shopify_asset_url | script_tag }}
+  <script>window.lazySizesConfig = window.lazySizesConfig || {};</script>
+  <script src="{{ 'lazysizes.js' | asset_url }}" async=""></script>
+  {{ 'handlebars.min.js' | asset_url | script_tag }}
+  {{ 'valencia.js'  | asset_url | script_tag }}
+  {{ content_for_header  }}
+
+  <title>
+  {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+  
+  <script type="text/javascript">(function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/1yZbYqmLYECNyFMLnZumBPTxcS8eIWzwZYskdZfy/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();</script>
+
+ 
+<script src="https://a.klaviyo.com/media/js/onsite/onsite.js"></script>
+<script>
+    var klaviyo = klaviyo || [];
+    klaviyo.init({
+      account: "N4nDkF",
+       list: 'TmzvbV',
+      
+      platform: "shopify"
+    });
+    klaviyo.enable("backinstock",{ 
+    trigger: {
+      product_page_text: "Email me when back in stock",
+      product_page_class: "nf",
+      product_page_text_align: "center",
+      product_page_margin: "0px",
+      replace_anchor: false
+    },
+    modal: {
+     headline: "{product_name}",
+     body_content: "To receive an in-stock notification email, enter your email.",
+     email_field_label: "Email",
+     button_label: "Notify me when available",
+     subscription_success_label: "We'll let you know when it's back!",
+     footer_content: '',
+     additional_styles: "@import url('https://cdn.shopify.com/s/files/1/2926/6108/t/53/assets/klaviyo.scss?v=6342135529312561212');",
+      font_family: '"Scto Grotesk A",sans-serif;',
+     drop_background_color: "##FFEADF",
+     background_color: "#FFEADF",
+     text_color: "#222",
+     button_text_color: "#FFEADF",
+     button_background_color: "#E89991",
+     close_button_color: "#ccc",
+     error_background_color: "##FFEADF",
+     error_text_color: "#C72E2F",
+     success_background_color: "##FFEADF",
+     success_text_color: "#1B9500"
+    }
+  });
+</script>
+  
+
+  {% render 'shogun-head' %}
+  {% include 'judgeme_core' %}
+</head>
+{% capture body_class %}{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} image-hover-light cta-fill-{{settings.cta_button_style}} {% if settings.show_custom_cursor %}custom-cursor{% endif %}{% endcapture %}
+
+
+<body id="{{ page_title | handle }}" class="{{ body_class }}" >
+
+  {% include 'gtm-container-body' %}
+  
+  {% section 'popup' %}
+
+  <div class="pageWrap">
+
+  {% section 'header' %}
+    <div class="bodyWrap">
+
+      {{ content_for_layout }}
+
+      {% section 'newsletter' %}
+      {% section 'footer' %}
+
+    </div> <!-- END bodyWrap -->
+  </div> <!-- END pageWrap -->
+
+  <!-- AJAX Mustache Templates -->
+  {% include 'ajax-cart' %}
+  {% include 'cart-popover' %}
+
+  {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+  {{ 'shop.js' | asset_url | script_tag }}
+  {% include 'load-spinner' %}
+  {% comment %}{% include 'search-autocomplete' %}{% endcomment %}
+  <script>Shopify.money_format = '{{ shop.money_format }}';</script>
+  
+  {% if settings.show_multiple_currencies %}
+    {% include 'currencies' %}
+  {% endif %}
+ {% include 'smile-initializer' %}
+
+
+  <!-- Afterpay messaging -->
+  {% render 'afterpay' %}
+  
+<script async type="text/javascript" data-api-key="pubkey-s2dSi1X0Iy7RcBL88d11YRICKM0Xpm" id="stamped-script-widget" src="https://cdn2.stamped.io/files/widget.min.js"></script>
+{%if template contains "product" %}
+  {% assign current_variant = product.selected_or_first_available_variant %}
+<script type="application/ld+json">
+{
+       "@context": "http://schema.org/",
+       "@type": "Product",
+  	   "url": "{{shop.secure_url | escape}}{{ product.url | escape }}",
+  	   "name": "{{ product.title | escape }}",
+       "image": "https:{{ product.featured_image.src | img_url: 'master' }}",
+       "description": "{{ product.description | escape }}",
+       "brand": {
+           "name": "{{ product.vendor }}"
+       },           
+       "sku": "{{ product.variants.first.sku }}",
+       "mpn": "{{ product.variants.first.sku }}",
+       "offers": {
+           "@type": "Offer",
+           "priceCurrency": "{{ shop.currency }}",
+           "price": "{{ current_variant.price | money_without_currency }}",
+           "availability": "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+           "seller": {
+               "@type": "Organization",
+                "name": "{{ shop.name }}"
+           },
+           "url": "{{shop.secure_url | escape}}{{ product.url | escape }}"
+       }
+ {% if product.metafields.stamped.reviews_count and product.metafields.stamped.reviews_count != "0" %},"aggregateRating": {
+"@type": "AggregateRating",
+"ratingValue": {{ product.metafields.stamped.reviews_average | round:2 }},
+"reviewCount": {{ product.metafields.stamped.reviews_count }},
+"bestRating": 5,
+"worstRating": 1
+}
+{% endif %}
+}
+</script>
+
+  {% endif %}
+</body>
+
+
+</html>
+

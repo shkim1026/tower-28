@@ -1,0 +1,111 @@
+{% assign showRel = section.settings.showRel %}
+{% assign custom_title = section.settings.custom_title %}
+
+{% if showRel %}
+  {% assign currentproduct = product.handle %}
+  {% assign totalproducts = 0 %}
+
+  {% for collection in product.collections limit: 1 %}
+    {% assign related = collection.handle %}
+    {% if collection.products_count > 1 %}
+      <section class="related-products container-wrap">
+        <div class="carousel container pad-med">
+          <div class="row row-sm carousel-title">
+            {% if custom_title != blank %}
+            <h2>{{ custom_title }}</h2>
+            {% endif %}
+          </div>
+          <div class="row row-lg js-carousel-slider inline">
+
+            {% for product in collections[related].products limit: 6 %}
+
+              {% if currentproduct != product.handle %}
+
+                {% assign on_sale = false %}
+                {% if product.compare_at_price > product.price %}
+                  {% assign on_sale = true %}
+                  {% assign on_sale_class = ' is-sale' %}
+                {% endif %}
+
+                {% assign sold_out = true %}
+                {% if product.available %}
+                  {% assign sold_out = false %}
+                {% endif %}
+
+                <a aria-label = "{{product.title}}" href="{{ product.url }}" class="carousel-slide js-slide block s56 med_s12 lg_s14">
+                  <div class="carousel-slide-image lazyload fade-in" title="{{ product.featured_image.alt }}" data-bgset="{% include 'bgset', image: product.featured_image %}" data-sizes="auto">
+                    {% if on_sale == true or sold_out == true %}
+                      <span class="h4 product-status-flag {% if sold_out == true %}is-sold-out{% endif %}{{on_sale_class}}">
+                        {% if sold_out == true %}
+                          {{ 'products.labels.sold_out' | t }}
+                        {% else if on_sale == true %}
+                          {{ 'products.labels.on_sale' | t }}
+                        {% else if on_sale == true and sold_out == true %}
+                          {{ 'products.labels.sold_out' | t }}
+                        {% endif %}
+                      </span>
+                    {% endif %}
+                    <div class="collectionBlock-image-inner"></div>
+                  </div>
+                  <div class="carousel-slide-info">
+                    <h4>{{ product.title }}</h4>
+                    {% if product.price_varies %}
+                      <h4>{{ 'products.labels.price_from' | t }} {{ product.price_min | money }}</h4>
+                    {% else %}
+                      {% if on_sale == true %}
+                        <h4 class="sale">
+                          <strike>{{ product.compare_at_price | money }}</strike>&nbsp;
+                          {{ product.price | money }}
+                        </h4>
+                      {% else %}
+                        <h4>{{ product.price | money }}</h4>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </a>
+
+              {% endif %}
+
+            {% endfor %}
+
+          </div>
+          {% if section.settings.show_button %}
+          <div class="row row-sm inline u-center">
+            <a href="{{ collections[related].url }}" class="button inline alt cap">
+            {{ 'products.product_page.similar_products_cta' | t }} {{ collections[related].title }}
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+  {% endif %}
+  <span id="product-json" hidden>{{ product | json }}</span>
+</div>
+
+{% schema %}
+  {
+    "name": "Related products",
+    "settings": [
+    {
+      "type": "checkbox",
+      "id": "showRel",
+      "label": "Show related products",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Heading",
+      "default":"Related Products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show collection link button",
+      "default":true
+    }]
+  }
+{% endschema %}
+

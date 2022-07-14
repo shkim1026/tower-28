@@ -1,0 +1,53 @@
+{% assign heading_size = section.settings.heading_size %}
+{% assign text_size = section.settings.text_size %}
+{% assign blocks_alignment = section.settings.blocks_alignment %}
+{% if blocks_alignment == 'center' %}
+<style>.feature-item { align-items: center; }</style>
+{% endif %}
+
+{% if section.blocks.size > 0 %}
+<div data-section-id="{{ section.id }}" data-section-type="product-features">
+  <div class="product-features--container pad-sm">
+    <div class="container">
+      <div class="row row-lg">
+        {% for block in section.blocks %}
+          {% assign is_block_odd = forloop.index | modulo: 2 %}
+
+          <div class="feature-item {% if is_block_odd == 0 %}feature-item--odd{% endif %}">
+            <div class = "feature-image">
+              {% if block.settings.image_link != blank %}<a href="{{ block.settings.image_link }}">{% endif %}
+              {% if block.settings.image != blank %}
+              {% assign image = block.settings.image %}
+              {% assign image_widths = '295,394,590,700,800,1000,1200,1500,1800,2000,2400' %}
+              {% include 'theme-rias' %}
+              <img 
+                 class="lazyload fade-in"
+                 data-src="{{ image_url_pattern }}"
+                 data-widths= "[{{ image_widths }}]"
+                 data-aspectratio="{{image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ image.alt | escape }}">
+              <noscript>
+                <img src="{{ image | img_url: '1024x' }}" alt="{{ image.alt | escape }}">
+              </noscript>
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: "placeholder-svg-filled" }}
+                {% endif %}
+                {% if block.settings.image_link != blank %}</a>{% endif %}
+            </div>
+            <div class="feature-text">
+              <div class="feature-text-wrap">
+                <h1 class="size--{{ heading_size }}">{{ block.settings.heading | escape }}</h1>
+                <div class="feature-text__p size--large">{{ block.settings.description }}</div>
+                {% if block.settings.button_text != blank %}
+                <a href="{{ block.settings.button_link }}" class="button">{{ block.settings.button_text }}</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
